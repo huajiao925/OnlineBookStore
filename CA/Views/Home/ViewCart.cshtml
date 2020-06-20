@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "ViewCart";
+    Layout = "~/Views/Shared/ProductPageLayout.cshtml";
+}
+
+@using BS.Models;
+@using BS.Models.ViewModels;
+
+<form method="post" class="viewcart-form" enctype="multipart/form-data" asp-controller="Home" asp-action="UpdateCart" style="width:100%">
+    @{double totalCost = 0;}
+    @{bool noItem = false;}
+    <div class="row">
+        <div class="col-lg-9">
+
+            @if (ViewData["itemCount"] != null && ViewData["cartItemList"] != null)
+            {
+                var cartItems = Newtonsoft.Json.JsonConvert
+                                .DeserializeObject<List<CartItem>>(@ViewData["cartItemList"].ToString());
+                noItem = false;
+
+                @foreach (var item in cartItems)
+                {
+                    <div class="form-group cart-item">
+                        <div class="cart-item-header">
+                            <input style="display:none" name="productId" value="@item.books.id" />
+                            <img src="~/ProductImages/@(item.books.id).svg" alt="books image" style="width:50px;height:50px;margin-right:5px;" />
+                            <h4>@item.books.Name</h4>
+                        </div>
+                        <div class="cart-item-body">
+
+                            <p><strong>Price</strong>: $ @item.books.UnitPrice</p>
+                            <p><strong>Quantity</strong>: <input type="number" min="0" name="quantity" value="@item.Quantity" class="number-input" /></p>
+
+                        </div>
+                        @{
+                            var eachProductCost = @item.books.UnitPrice * item.Quantity;
+                            totalCost = totalCost + eachProductCost;
+                        }
+
+                        <hr />
+                    </div>
+
+                }
+
+
+            }
+            else
+            {
+                 noItem = true;
+                <p>No Item in the list.</p>
+             }
+
+
+        </div>
+        <div class="col-lg-3">
+            @if (!noItem)
+            {
+                <input style="margin-top:20px;" class="btn btn-outline-warning" type="submit" value="Update Cart" />
+            }
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="" style="float:left">
+                <button class="btn btn-outline-primary" asp-controller="Home" asp-action="Index">Continue Shopping</button>
+            </div>
+            @if (!noItem)
+            {
+                <p class="total"><b>Total:</b> S$@totalCost </p>
+            }
+            </div>
+        <input style="display:none" name="totalCost" value="@totalCost" />
+        @if (!noItem)
+        {
+            <div class="col-lg-3">
+
+                <input class="btn btn-outline-primary" formaction="Checkout?cmd=click" type="submit" value="Check Out" />
+            </div>
+        }
+
+    </div>
+</form>
+

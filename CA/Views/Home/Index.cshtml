@@ -1,0 +1,60 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_SharedTemplate.cshtml";
+    ViewData["Title"] = "Home";
+    var BookList = (List<Books>)ViewData["Books"];
+    var Reviews = (List<Review>)ViewData["Reviews"];
+    string message = (string)ViewData["message"];
+}
+
+<!--SearchBar-->
+<div style="margin-top:100px;">
+    <form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="Index">
+        <input type="text" class="form-control ds-input" name="search" id="search" placeholder="Find a Book..."
+                aria-label="Search for..." style="position:relative;">
+        <button type="submit" id="searchBtn" class="btn btn-outline-primary btn-sm">Search</button>
+    </form>
+</div>
+
+<!--Display Products-->
+<div><p>@message</p></div>
+<form method="post">
+    <div class="container">
+        <div class="row">
+        @{
+            foreach (var book in BookList)
+            {
+                string img = "/";
+
+                var bookReview = Reviews.Where(x => x.BookId == book.id).ToList();
+                int totalReviews = bookReview.Count();
+                double totalRating = bookReview.Sum(x => x.Rating);
+                double avgRating = 0.0;
+
+                if (totalReviews != 0)
+                {
+                    avgRating = totalRating / totalReviews;
+                }
+
+                <div class="col-lg-4 product-info" style="margin:20px;">
+                    <ul class="list-group list-group-horizontal">
+                                <li class="list-group-item">
+                                    <a href="/bookdetail/@book.ISBN">
+                                        <img src=@img width="50" height="50" />
+                                        <h1 class="courseDetails">@book.Name</h1>
+                                    </a>
+                                    <p style="height:108px;">@book.Description</p>
+                                    <p>ISBN: @book.ISBN</p>
+                                    <p>Published: @book.PublishYear</p>
+                                    <p>Author: @book.Author</p>
+                                    <p><b>Price</b>: S$@book.UnitPrice</p>
+                                    <p>Average Rate: @avgRating /5</p>
+                                    <p>Total Reviews: @totalReviews</p>
+                                </li>
+                    </ul>
+                </div>
+                }
+            }
+        </div>
+    </div>
+</form>

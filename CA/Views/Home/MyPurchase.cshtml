@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewData["Title"] = "MyPurchase";
+    Layout = "~/Views/Shared/ProductPageLayout.cshtml";
+}
+
+<h1>MyPurchases</h1>
+@using CA.Models;
+@model List<OrderDetails>;
+
+<form method="post" class="viewcart-form" enctype="multipart/form-data" asp-controller="Home" asp-action="MyPurchase" style="width:100%">
+
+    @foreach(var item in Model)
+    {
+        <p><b>ProductId:</b> @item.ProductId</p>
+        <p><b>Quantity of ProductId~@item.ProductId :</b> @item.Quantity</p>
+        //<p><b>TotalAmount : </b>@item.TotalAmount</p>
+        <hr/>
+    }
+
+</form>
+
+

@@ -1,0 +1,87 @@
+﻿@{
+    Layout = "~/Views/Shared/ProductPageLayout.cshtml";
+    ViewData["Title"] = "Purchase History";
+    var orderdetails = (List<BS.Models.OrderDetails>)ViewData["OrderDetails"];
+    var order = (List<BS.Models.Order>)ViewData["Order"];
+    var activation = (List<BS.Models.Discount>)ViewData["Discount"];
+
+}
+
+    <div class="viewcart-form">
+        @{
+            foreach (var item in orderdetails)
+            {
+                string img = "/ProductImages/" + item.BookId + ".svg";
+                string downloadlink = "/Download/" + item.BookId + ".pdf";
+
+                <div class="row purchase-history">
+                    <div class="col-lg-4">
+                        <table class="left table w-auto">
+                            <tr>
+                                <td> <img src=@img width="50" height="50" /></td>
+                            </tr>
+                            <tr>
+                                <td><b>@item.Books.Name</b></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <form method="get" action="~/ProductImages/@(item.BookId).svg">
+                                        <button class="btn btn-primary" type="submit">Download</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-lg-6">
+                        <table class="left table w-auto">
+                            <tr>
+                                <td>Order Id: </td>
+                                <td>@item.OrderId</td>
+                            </tr>
+                            <tr>
+                                <td>Purchased On: </td>
+                                <td>@item.Order.PurchaseDate.ToLocalTime()</td>
+                            </tr>
+                            <tr>
+                                <td>Quantity:</td>
+                                <td>@item.Quantity</td>
+                            </tr>
+                            <tr>
+                                <td>Activation Code:</td>
+                                <td>
+                                    @if (item.Quantity == 1)
+                                    {
+                                        foreach (var item2 in activation)
+                                        {
+                                            if (item.OrderId == item2.OrderId)
+                                                @item2.DiscountCodes
+                                            }
+                                        }
+                                        else
+                                        {<select id="activationcode" name="activationcode" size="1">
+                                                @foreach (var item2 in activation)
+                                                {
+                                                    if (item.OrderId == item2.OrderId)
+                                                    {
+                                                        <option>@item2.DiscountCodes</option>
+                                                    }
+                                                }
+                                            </select>
+
+                                        }
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <table class="purchased table table-responsive-lg">
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                </table>
+            }
+        }
+    </div>

@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewData["Title"] = "Book Detail";
+    Books bookInfo = (Books)ViewData["bookInfo"];
+    List<Review> reviewInfo = (List<Review>)ViewData["reviewInfo"];
+}
+<!--Book Details-->
+<h1>Book</h1>
+<ul>
+    <li>
+        Name: @bookInfo.Name
+    </li>
+    <li>
+        Author: @bookInfo.Author
+    </li>
+    <li>
+        ISBN: @bookInfo.ISBN
+    </li>
+    <li>
+        Publish Year: @bookInfo.PublishYear
+    </li>
+    <li>
+        Price: @bookInfo.UnitPrice
+    </li>
+</ul>
+<button>Buy Now</button>
+<button>Add to Cart</button>
+
+<!--Book Reviews-->
+<h1>Reviews</h1>
+<table>
+    <tr><th></th><th></th></tr>
+    @{ if (reviewInfo != null)
+        {
+            foreach (var r in reviewInfo)
+            {
+            <tr>
+                <td>@r.User.Username</td>
+                <td>@r.Rating</td>
+            </tr>
+            <tr>
+                <td>Reviews: @r.Reviews</td>
+            </tr>
+                }
+            }
+        }
+</table>
+<!--Review Form-->
+<h1>What do you think of this book?</h1>
+<form>
+    <p>How good you think the book is?</p>
+    <input type="radio" />5 stars
+    <p>Tell us more:</p>
+    <input type="text"/>
+    <button type="submit">Submit</button>
+</form>
