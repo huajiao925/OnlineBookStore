@@ -15,6 +15,6 @@ Basic functions:
 4. MyAccount: 
 - display purchase records and reviews 
 - generate discount code per order made
-5. Services
+5. Services: using dependency injection
 
 --to be continue--
